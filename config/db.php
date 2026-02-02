@@ -2,7 +2,11 @@
 $host = 'localhost';
 $user = 'root';
 $pass = ''; 
+<<<<<<< HEAD
 $dbname = 'assmt';
+=======
+$dbname = 'gym_db';
+>>>>>>> 091c91b221d63451da86c33f35aef85c40e8278c
 
 try {
     $pdo = new PDO("mysql:host=$host", $user, $pass);

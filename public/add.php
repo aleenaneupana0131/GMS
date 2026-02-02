@@ -3,17 +3,25 @@ require_once '../config/db.php';
 require_once '../includes/functions.php';
 require_login();
 
+<<<<<<< HEAD
 $errors = []; // Error container
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verify_csrf_token($_POST['csrf_token']);
     
     // 1. Get & Validate Form Data
+=======
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    verify_csrf_token($_POST['csrf_token']);
+    
+    // 1. Get Form Data
+>>>>>>> 091c91b221d63451da86c33f35aef85c40e8278c
     $name = trim($_POST['full_name']);
     $phone = trim($_POST['phone']);
     $start = $_POST['start_date'];
     $package = (int)$_POST['package'];
     
+<<<<<<< HEAD
     // Server-side Validation
     if (empty($name)) $errors[] = "Member name is required.";
     if (empty($phone)) $errors[] = "Phone number is required.";
@@ -54,6 +62,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header("Location: dashboard.php"); 
         exit;
     }
+=======
+    // 2. Calculate End Date (Start + X Months)
+    $end = date('Y-m-d', strtotime("$start + $package months"));
+    
+    // 3. Handle Cute Photo Upload
+    $photo = "default.png";
+    if (!empty($_FILES['photo']['name'])) {
+        $ext = pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
+        $photo = time() . "_" . uniqid() . "." . $ext;
+        move_uploaded_file($_FILES['photo']['tmp_name'], "uploads/" . $photo);
+    }
+
+    // 4. Save to Database
+    $stmt = $pdo->prepare("INSERT INTO members (full_name, phone, start_date, end_date, photo) VALUES (?,?,?,?,?)");
+    $stmt->execute([$name, $phone, $start, $end, $photo]);
+    
+    header("Location: dashboard.php"); 
+    exit;
+>>>>>>> 091c91b221d63451da86c33f35aef85c40e8278c
 }
 ?>
 <?php include '../includes/header.php'; ?>
@@ -66,6 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <p style="color: #999; font-size: 14px;">Fill in the details to join the gym</p>
     </div>
 
+<<<<<<< HEAD
     <!-- Error Display -->
     <?php if (!empty($errors)): ?>
         <div style="background: #fff0f3; color: #d32f2f; padding: 15px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #ffcdd2;">
@@ -75,6 +103,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     <?php endif; ?>
 
+=======
+>>>>>>> 091c91b221d63451da86c33f35aef85c40e8278c
     <form method="POST" enctype="multipart/form-data">
         <!-- Security Token -->
         <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
@@ -100,7 +130,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <!-- Hidden Canvas -->
             <canvas id="canvas" width="320" height="240" style="display: none;"></canvas>
 
+<<<<<<< HEAD
             <input type="file" name="photo" id="photo-input" accept="image/png, image/jpeg, image/gif" style="border: 2px dashed var(--light-pink); padding: 15px; background: #fffcfd; width: 100%; border-radius: 15px;">
+=======
+            <input type="file" name="photo" id="photo-input" accept="image/*" style="border: 2px dashed var(--light-pink); padding: 15px; background: #fffcfd; width: 100%; border-radius: 15px;">
+>>>>>>> 091c91b221d63451da86c33f35aef85c40e8278c
         </div>
 
         <script>
@@ -159,28 +193,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <!-- Full Name -->
         <div>
             <label>Full Name</label>
+<<<<<<< HEAD
             <input type="text" name="full_name" placeholder="e.g. Barbie Doe" value="<?php echo h($_POST['full_name'] ?? ''); ?>" required>
+=======
+            <input type="text" name="full_name" placeholder="e.g. Barbie Doe" required>
+>>>>>>> 091c91b221d63451da86c33f35aef85c40e8278c
         </div>
 
         <!-- Phone -->
         <div>
             <label>Phone Number</label>
+<<<<<<< HEAD
             <input type="text" name="phone" placeholder="e.g. 0123456789" value="<?php echo h($_POST['phone'] ?? ''); ?>" required>
+=======
+            <input type="text" name="phone" placeholder="e.g. 0123456789" required>
+>>>>>>> 091c91b221d63451da86c33f35aef85c40e8278c
         </div>
 
         <!-- Row for Dates/Packages -->
         <div style="display: flex; gap: 15px;">
             <div style="flex: 1;">
                 <label>Start Date</label>
+<<<<<<< HEAD
                 <input type="date" name="start_date" value="<?php echo h($_POST['start_date'] ?? date('Y-m-d')); ?>" required>
+=======
+                <input type="date" name="start_date" value="<?php echo date('Y-m-d'); ?>" required>
+>>>>>>> 091c91b221d63451da86c33f35aef85c40e8278c
             </div>
             <div style="flex: 1;">
                 <label>Package</label>
                 <select name="package">
+<<<<<<< HEAD
                     <option value="1" <?php echo (($_POST['package']??'') == 1) ? 'selected' : ''; ?>>1 Month</option>
                     <option value="3" <?php echo (($_POST['package']??'') == 3) ? 'selected' : ''; ?>>3 Months</option>
                     <option value="6" <?php echo (($_POST['package']??'') == 6) ? 'selected' : ''; ?>>6 Months</option>
                     <option value="12" <?php echo (($_POST['package']??'') == 12) ? 'selected' : ''; ?>>1 Year</option>
+=======
+                    <option value="1">1 Month</option>
+                    <option value="3">3 Months</option>
+                    <option value="6">6 Months</option>
+                    <option value="12">1 Year</option>
+>>>>>>> 091c91b221d63451da86c33f35aef85c40e8278c
                 </select>
             </div>
         </div>
